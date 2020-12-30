@@ -49,7 +49,7 @@ void CrtHuffmanTree(HufTree ht, unsigned int char_kinds, unsigned int node_num) 
     {
         select(ht, i, &s1, &s2); //
 
-        ht[i].weight = ht[s1].weight + ht[s2].weight; 
+        ht[i].weight = ht[s1].weight + ht[s2].weight;
         ht[i].Lchild = s1;
         ht[i].Rchild = s2; //
         ht[s1].parent = i;
@@ -121,7 +121,7 @@ int compress(char *ifname, char *ofname)
     }
     fclose(infile);
 
-    // 
+    //
     for (i = 0; i < 256 - 1; ++i)
         for (j = i + 1; j < 256; ++j)
             if (tmp_nodes[i].weight < tmp_nodes[j].weight)
@@ -131,7 +131,7 @@ int compress(char *ifname, char *ofname)
                 tmp_nodes[j] = node_temp;
             }
 
-    // 
+    //
     for (i = 0; i < 256; ++i)
         if (tmp_nodes[i].weight == 0)
             break;
@@ -139,10 +139,10 @@ int compress(char *ifname, char *ofname)
 
     if (char_kinds == 1) //
     {
-        outfile = fopen(ofname, "wb");                                           // 
-        fwrite((char *)&char_kinds, sizeof(unsigned int), 1, outfile);           // 
-        fwrite((char *)&tmp_nodes[0].vaule, sizeof(unsigned char), 1, outfile);  // 
-        fwrite((char *)&tmp_nodes[0].weight, sizeof(unsigned long), 1, outfile); // 
+        outfile = fopen(ofname, "wb");                                           //
+        fwrite((char *)&char_kinds, sizeof(unsigned int), 1, outfile);           //
+        fwrite((char *)&tmp_nodes[0].vaule, sizeof(unsigned char), 1, outfile);  //
+        fwrite((char *)&tmp_nodes[0].weight, sizeof(unsigned long), 1, outfile); //
 
         free(tmp_nodes); //
         fclose(outfile);
@@ -193,12 +193,12 @@ int compress(char *ifname, char *ofname)
 
             while (strlen(code_buf) >= 8) //
             {
-                char_temp = '\0'; // 
+                char_temp = '\0'; //
                 for (i = 0; i < 8; i++)
                 {
-                    char_temp <<= 1; // 
+                    char_temp <<= 1; //
                     if (code_buf[i] == '1')
-                        char_temp |= 1; // 
+                        char_temp |= 1; //
                 }
                 fwrite((char *)&char_temp, sizeof(unsigned char), 1, outfile);
                 strcpy(code_buf, code_buf + 8);
@@ -298,11 +298,11 @@ int extract(char *ifname, char *ofname)
                     break;
                 root = node_num - 1; //
             }
-            code_temp <<= 1; 
+            code_temp <<= 1;
         }
         if (write_len == file_len)
             break;
-    } 
+    }
 
     fclose(infile);
     fclose(outfile);
@@ -312,21 +312,19 @@ int extract(char *ifname, char *ofname)
 }
 int main()
 {
-    while (1)
+    int opt, flag = 0;                   //
+    char ifname[256] = {0}, ofname[256]; //
+    printf("\t\t--------------------------------------------\n");
+    printf("\t\t----Software Engineering-1901-Liu Yuyang----\n");
+    printf("\t\t\t Huffman (un)Compress System\n");
+    printf("\t\t1:Compress\n");
+    printf("\t\t2:Uncompress\n");
+    printf("\t\t3:Return Encode Program\n");
+    printf("\t\t--------------------------------------------\n");
+    printf("\t\t\t\tPlz choose:");
+    scanf("%d", &opt);
+    while (opt != 1 || opt != 2 || opt != 3)
     {
-        int opt, flag = 0;             // 
-        char ifname[256], ofname[256]; // 
-        printf("\t\t--------------------------------------------\n");
-        printf("\t\t----Software Engineering-1901-Liu Yuyang----\n");
-        printf("\t\t\t Huffman (un)Compress System\n");
-        printf("\t\t1:Compress\n");
-        printf("\t\t2:Uncompress\n");
-        printf("\t\t3:Return Encode Program\n");
-        printf("\t\t4:Quit\n");
-        printf("\t\t--------------------------------------------\n");
-        printf("\t\t\t\tPlz choose:");
-        scanf("%d", &opt);
-
         switch (opt)
         {
         case 1:
@@ -336,8 +334,8 @@ int main()
             printf("\n\t\tplz input the outfile name:");
             fflush(stdin);
             gets(ofname);
-            printf("\t\tCompressing...\n");
-            flag = compress(ifname, ofname); // 
+            printf("\n\t\t----------Compressing...----------\n");
+            flag = compress(ifname, ofname); //
             break;
         case 2:
             printf("\n\t\tplz input the file path to uncompress: ");
@@ -346,23 +344,22 @@ int main()
             printf("\n\t\tplz input the outfile name: ");
             fflush(stdin);
             gets(ofname);
-            printf("\t\tUncompressing...\n");
-            flag = extract(ifname, ofname); // 
+            printf("\n\t\t----------Uncompressing...----------\n");
+            flag = extract(ifname, ofname); //
             break;
         case 3:
-            printf("\t\tReturning...\n\n");
-            system("xz-1.exe");
-        case 4:
-            exit(0);
+            printf("\n\t\t----------Returning...----------\n\n");
+            system("main.exe");
+            break;
         }
-        if (flag == -1)
-            printf("\t\tSorry, infile \"%s\" doesn't exist!\n", ifname); // 
-        else
-        {
-            printf("\t\tThe file %s has been created!\n\t\t",ofname); 
-            system("pause");
-        }
-            
+        break;
+    }
+    if (flag == -1)
+        printf("\t\t----------Sorry, infile \"%s\" doesn't exist!----------\n", ifname); //
+    else
+    {
+        printf("\t\t----------The compress-file \" %s \" has been created!----------\n\t\t", ofname);
+        system("pause");
     }
     return 0;
 }
