@@ -261,7 +261,7 @@ int main()
             break;
         case 3:
             printf("\t\tLoading Compress and Uncompress program......\n\n");
-            system("hufcompress.exe");
+            system("main_compress.exe");
             break;
         case 4:
             exit(0);
